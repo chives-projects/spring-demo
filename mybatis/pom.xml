@@ -15,6 +15,7 @@
     </properties>
     <modules>
         <module>xml</module>
+        <module>annotation</module>
     </modules>
     <dependencies>
         <dependency>

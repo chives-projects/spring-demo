@@ -7,8 +7,8 @@
         <artifactId>mybatis</artifactId>
         <version>0.0.1</version>
     </parent>
-    <artifactId>xml</artifactId>
-    <name>xml</name>
+    <artifactId>annotation</artifactId>
+    <name>annotation</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
