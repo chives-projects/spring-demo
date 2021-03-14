@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csc.spring.mybatis.xml.mapper.UserMapper">
+    <cache>
+        <!--<property name="memoryStoreEvictionPolicy" value="LRU"></property>-->
+    </cache>
+    <resultMap id="userMap" type="com.csc.spring.mybatis.xml.domain.User">
+        <id property="id" javaType="int" column="id" jdbcType="INTEGER"></id>
+        <result property="username" javaType="String" column="username" jdbcType="VARCHAR"></result>
+        <result property="address" column="address"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+    </resultMap>
+    <resultMap id="userAccountMap" type="com.csc.spring.mybatis.xml.domain.User">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="address" column="address"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <collection property="accounts" ofType="com.csc.spring.mybatis.xml.domain.Account">
+            <id property="id" column="aid"></id>
+            <result property="uid" column="uid"></result>
+            <result property="money" column="money"></result>
+        </collection>
+    </resultMap>
+    <resultMap id="userRoleMap" type="com.csc.spring.mybatis.xml.domain.User">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="address" column="address"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <!-- 配置角色集合的映射 -->
+        <collection property="roles" ofType="com.csc.spring.mybatis.xml.domain.Role">
+            <id property="roleId" column="rid"></id>
+            <result property="roleName" column="role_name"></result>
+            <result property="roleDesc" column="role_desc"></result>
+        </collection>
+    </resultMap>
+    <resultMap id="userAccountMapLazy" type="com.csc.spring.mybatis.xml.domain.User">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="address" column="address"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <!-- 配置user对象中accounts集合的映射 -->
+        <collection property="accounts" column="id" ofType="com.csc.spring.mybatis.xml.domain.Account" fetchType="lazy"
+                    select="com.csc.spring.mybatis.xml.mapper.AccountMapper.findAccountByUid"></collection>
+    </resultMap>
+
+
+    <sql id="default">
+        select * from user
+    </sql>
+
+    <!--<select id="findAll" resultType="com.csc.spring.mybatis.xml.domain.User">-->
+    <!--select * from user-->
+    <!--</select>-->
+    <select id="findAll" resultMap="userMap">
+        <include refid="default"></include>
+        <!--select * from user -->
+    </select>
+    <select id="findAllUserAccount" resultMap="userAccountMap">
+        select * from user u left outer join account a on u.id = a.uid
+    </select>
+    <select id="findAllUserRole" resultMap="userRoleMap">
+        select u.*,r.id as rid,r.role_name,r.role_desc from user u
+         left outer join user_role ur  on u.id = ur.uid
+         left outer join role r on r.id = ur.rid
+    </select>
+    <select id="findAllUserAccountLazy" resultMap="userAccountMapLazy">
+        select * from user
+    </select>
+
+    <select id="findById" resultType="com.csc.spring.mybatis.xml.domain.User" parameterType="int" useCache="true">
+        select * from user where id = #{id}
+    </select>
+
+    <insert id="saveUser" parameterType="com.csc.spring.mybatis.xml.domain.User">
+        <selectKey keyColumn="id" keyProperty="id" resultType="int">
+            select last_insert_id();
+        </selectKey>
+        insert into user (username,birthday,sex,address)
+        value (#{username},#{birthday},#{sex},#{address})
+    </insert>
+
+    <update id="updateUser">
+        update user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username!=null">username = #{username},</if>
+            <if test="birthday!=null">birthday = #{birthday},</if>
+            <if test="sex!=null">sex = #{sex},</if>
+            <if test="address!=null">address = #{address}</if>
+        </trim>
+        <!--<set>-->
+            <!--<if test="username!=null">username = #{username},</if>-->
+            <!--<if test="birthday!=null">birthday = #{birthday},</if>-->
+            <!--<if test="sex!=null">sex = #{sex},</if>-->
+            <!--<if test="address!=null">address = #{address}</if>-->
+        <!--</set>-->
+        <!--
+        set username = #{username},birthday=#{birthday},sex=#{sex},address=#{address}
+        -->
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        delete from user where id=#{id}
+    </delete>
+
+    <select id="findByName1" resultType="com.csc.spring.mybatis.xml.domain.User" parameterType="String">
+        select * from user where username like #{username}
+    </select>
+    <select id="findByName2" resultType="com.csc.spring.mybatis.xml.domain.User" parameterType="String">
+        select * from user where username like '%${username}%'
+    </select>
+
+    <select id="findTotal" resultType="int">
+        select count(*) from user
+    </select>
+
+    <select id="findByVo" parameterType="com.csc.spring.mybatis.xml.domain.QueryVo" resultType="com.csc.spring.mybatis.xml.domain.User">
+        select * from user where username like #{user.username}
+    </select>
+
+    <!--<select id="findUserByCondition" resultMap="userMap" parameterType="com.csc.spring.mybatis.xml.domain.User">-->
+    <!--select * from user where 1=1-->
+    <!--<if test="name!=null">-->
+    <!--and username=#{name}-->
+    <!--</if>-->
+    <!--<if test="Sex!=null">-->
+    <!--and sex=#{Sex}-->
+    <!--</if>-->
+    <!--</select>-->
+    <select id="findUserByCondition" resultMap="userMap" parameterType="com.csc.spring.mybatis.xml.domain.User">
+        select * from user
+        <!--<trim prefix="WHERE" prefixOverrides="AND |OR ">-->
+        <!--<if test="username!=null">-->
+        <!--and username=#{username}-->
+        <!--</if>-->
+        <!--<if test="sex!=null">-->
+        <!--and sex=#{sex}-->
+        <!--</if>-->
+        <!--</trim>-->
+        <!--<where>-->
+            <!--<if test="username!=null">-->
+                <!--and username=#{username}-->
+            <!--</if>-->
+            <!--<if test="sex!=null">-->
+                <!--and sex=#{sex}-->
+            <!--</if>-->
+        <!--</where>where sex='男'-->
+
+        <where>
+            <choose>
+                <when test="username!=null">
+                    and username=#{username}
+                </when>
+                <when test="address!=null">
+                    and address=#{address}
+                </when>
+                <otherwise>
+                    and sex='男'
+                </otherwise>
+            </choose>
+        </where>
+
+    </select>
+
+    <select id="findUserByIds" resultMap="userMap" parameterType="java.util.List">
+        <!-- select * from user -->
+        <include refid="default"></include>
+        <where>
+            <if test="list!=null and list.size()>0">
+                <foreach collection="list" open="and id in (" close=")" item="id" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="findUserByIdArray" resultMap="userMap" parameterType="int">
+        <!-- select * from user -->
+        <include refid="default"></include>
+        <where>
+            <if test="array!=null">
+                <foreach collection="array" open="and id in (" close=")" item="id" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="findUserByIdMap" resultMap="userMap" parameterType="java.util.Map">
+        <!-- select * from user -->
+        <include refid="default"></include>
+        <where>
+            <!--<foreach collection="keys" index="key" item="value">-->
+                <!--and ${key} = #{value}-->
+            <!--</foreach>-->
+
+            <if test="_parameter!=null">
+                <foreach collection="_parameter" index="key" item="value">
+                    and ${key} = #{value}
+                </foreach>
+            </if>
+            <!--<if test="id!=null">-->
+                <!--id = #{id}-->
+            <!--</if>-->
+            <!--<if test="sex!=null">-->
+                <!--and sex = #{sex}-->
+            <!--</if>-->
+
+        </where>
+    </select>
+
+    <insert id="addBatch" parameterType="user">
+        insert into user(username,sex) value
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.username},
+            #{item.sex}
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

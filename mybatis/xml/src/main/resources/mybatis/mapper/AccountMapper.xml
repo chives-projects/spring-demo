@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csc.spring.mybatis.xml.mapper.AccountMapper">
+    <resultMap id="accountUserMap" type="com.csc.spring.mybatis.xml.domain.Account">
+        <id property="id" column="aid"></id>
+        <result property="uid" column="uid"></result>
+        <result property="money" column="money"></result>
+        <association property="user" column="id" javaType="com.csc.spring.mybatis.xml.domain.User">
+            <id property="id" column="id"></id>
+            <result property="username" column="username"></result>
+            <result property="address" column="address"></result>
+            <result property="sex" column="sex"></result>
+            <result property="birthday" column="birthday"></result>
+        </association>
+    </resultMap>
+    <resultMap id="accountUserMapLazy" type="com.csc.spring.mybatis.xml.domain.Account">
+        <id property="id" column="id"></id>
+        <result property="uid" column="uid"></result>
+        <result property="money" column="money"></result>
+        <!-- 一对一的关系映射：配置封装user的内容
+        select属性指定的内容：查询用户的唯一标识：
+        column属性指定的内容：用户根据id查询时，所需要的参数的值
+        -->
+        <association fetchType="lazy" property="user" column="uid" javaType="com.csc.spring.mybatis.xml.domain.User"
+                     select="com.csc.spring.mybatis.xml.mapper.UserMapper.findById">
+        </association>
+    </resultMap>
+
+    <!-- 查询所有 -->
+    <select id="findAll" resultMap="accountUserMap">
+        select u.*,a.id as aid,a.uid,a.money from account a , user u where u.id = a.uid;
+    </select>
+
+    <select id="findAllLazy" resultMap="accountUserMapLazy">
+        select * from account
+    </select>
+
+    <!--查询所有账户同时包含用户名和地址信息-->
+    <select id="findAllAccount" resultType="com.csc.spring.mybatis.xml.domain.AccountUser">
+        select a.*,u.username,u.address from account a , user u where u.id = a.uid;
+    </select>
+
+    <select id="findAccountByUid" resultType="com.csc.spring.mybatis.xml.domain.Account">
+        select * from account where uid = #{uid}
+    </select>
+</mapper>
