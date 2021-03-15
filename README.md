@@ -6,7 +6,14 @@
 - **mybatis**：
   - xml
   - annotation
-  
-
 - **mybatis plus**：to improve
+- **redis**：
+
+
+
+
+* [ ] **mongo**
+* [ ] **swagger**
+* [ ] **rabbitmq**
+* [ ] 多数据源，mabatis逆向
 
