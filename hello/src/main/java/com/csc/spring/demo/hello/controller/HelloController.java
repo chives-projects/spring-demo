@@ -1,5 +1,8 @@
 package com.csc.spring.demo.hello.controller;
 
+import com.csc.spring.demo.hello.domain.User;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -14,10 +17,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Component
 @RestController
+@Api(tags = "示例controller")
 @RequestMapping("hello")
 public class HelloController {
     private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
 
+    @ApiOperation("get方法")
     @GetMapping(value = "get")
     public String get() {
         logger.trace("这是track日志。。。");
