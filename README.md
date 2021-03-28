@@ -8,12 +8,11 @@
   - annotation
 - **mybatis plus**：to improve
 - **redis**：
+- **rabbitmq**：
 
 
 
-
-* [ ] **mongo**
-* [ ] **swagger**
-* [ ] **rabbitmq**
+* [ ] **elasticsearch**
+* [ ] **oauth2**
 * [ ] 多数据源，mabatis逆向
 
