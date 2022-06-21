@@ -27,6 +27,7 @@
         <module>mongo</module>
         <module>rabbitmq</module>
         <module>oauth2</module>
+        <module>mock</module>
     </modules>
     <dependencies>
         <dependency>
