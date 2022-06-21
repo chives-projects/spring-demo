@@ -10,6 +10,7 @@
     </parent>
     <groupId>com.csc.spring.demo</groupId>
     <artifactId>spring-demo</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.1</version>
     <name>spring-demo</name>
     <description>Demo project for Spring Boot</description>

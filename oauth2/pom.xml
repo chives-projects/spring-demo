@@ -8,6 +8,7 @@
         <version>0.0.1</version>
     </parent>
     <artifactId>oauth2</artifactId>
+    <packaging>pom</packaging>
     <name>oauth2</name>
     <modules>
         <module>resource-server</module>
