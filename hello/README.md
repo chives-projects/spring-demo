@@ -17,3 +17,9 @@ UI 增强：http://ip:port/doc.html
 
 可以只替换原生的`springfox-swagger-ui`为`knife4j-spring-ui`;也可以直接使用`knife4j-spring-boot-starter`依赖
 
+## 基于@Bean注解和xml创建实例
+
+
+
+
+

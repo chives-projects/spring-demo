@@ -15,6 +15,14 @@ public class User {
     @ApiModelProperty("姓名")
     private String name;
 
+    public User() {
+    }
+
+    public User(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }
