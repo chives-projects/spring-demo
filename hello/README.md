@@ -21,5 +21,13 @@ UI 增强：http://ip:port/doc.html
 
 
 
+## SPI 示例
+
+在resource目录下创建**两级**目录`META-INF\services`（注：idea中显示为META-INF.services,）,新建文件夹名字为接口的Reference，文件内容为需要使用接口的子类。
+
+
+
+
+
 
 
