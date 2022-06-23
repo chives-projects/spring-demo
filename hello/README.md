@@ -25,6 +25,12 @@ UI 增强：http://ip:port/doc.html
 
 在resource目录下创建**两级**目录`META-INF\services`（注：idea中显示为META-INF.services,）,新建文件夹名字为接口的Reference，文件内容为需要使用接口的子类。
 
+## 事件发布监听
+
+自定义事件类ApplicationEvent，基于监听类ApplicationListener或者注解EventListener的形式实现。
+
+扩展SimpleApplicationEventMulticaster的事件执行器。
+
 
 
 
