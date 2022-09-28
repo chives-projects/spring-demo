@@ -3,43 +3,40 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.csc.spring.demo</groupId>
+        <artifactId>spring-demo</artifactId>
+        <version>0.0.1</version>
     </parent>
-    <groupId>com.csc.spring.demo</groupId>
-    <artifactId>spring-demo</artifactId>
-    <packaging>pom</packaging>
-    <version>0.0.1</version>
-    <name>spring-demo</name>
+    <groupId>com.csc</groupId>
+    <artifactId>pushmes</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>pushmes</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
-
-    <modules>
-        <module>hello</module>
-        <module>web</module>
-        <module>mybatis</module>
-        <module>mybatis-plus</module>
-        <module>redis</module>
-        <module>mongo</module>
-        <module>rabbitmq</module>
-        <module>oauth2</module>
-        <module>mock</module>
-        <module>pushmes</module>
-    </modules>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-integration</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 

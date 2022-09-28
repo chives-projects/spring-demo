@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webFluxDemo</title>
+</head>
+<body>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+    console.log('ready start……');
+    $(document).ready(function () {
+            //判断浏览器是不是支持SSE
+            if (window.EventSource) {
+                // 创建 EventSource 对象连接服务器
+                // var eventSource = new EventSource('http://127.0.0.1:8080/api/webflux/sse');
+                // var eventSource = new EventSource('http://127.0.0.1:8080/api/webflux/words');
+                // var eventSource = new EventSource('http://127.0.0.1:8080/api/webflux/schedule');
+                var eventSource = new EventSource('http://127.0.0.1:8080/api/webflux/customEvent/3');
+                // var eventSource = new EventSource('http://127.0.0.1:8080/api/webflux/message');
+                //curl http://localhost:8080/api/webflux/publish/mes1
+
+
+                // 连接成功窒触发open事件
+                eventSource.addEventListener('open', () => {
+                    console.log('Connected');
+                }, false);
+
+                // 服务器发送信息到客户端时，如果没有 event 字段，默认会触发 message 事件
+                eventSource.addEventListener('message', e => {
+                    console.log(`data: ${e.data}`);
+                }, false);
+
+                // 自定义 EventHandler，在收到 event 字段为 stop 的消息时触发
+                //在这里我们将SSE关闭
+                eventSource.addEventListener('stop', e => {
+                    eventSource.close();
+                    console.log('Closed');
+                }, false);
+
+                // 连接异常时会触发 error 事件并自动重连
+                eventSource.addEventListener('error', e => {
+                    if (e.target.readyState === EventSource.CLOSED) {
+                        console.log('Disconnected');
+                    } else if (e.target.readyState === EventSource.CONNECTING) {
+                        console.log('Connecting...');
+                    }
+                }, false);
+            } else {
+                console.error('Your browser doesn\'t support SSE');
+            }
+
+        }
+    );
+</script>
+</body>
+</html>
