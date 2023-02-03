@@ -1,0 +1,40 @@
+
+
+
+-- grant_type = 'client_credentials'
+
+-- SQL
+insert into oauth_client_details
+(client_id, resource_ids, client_secret, scope, authorized_grant_types,
+web_server_redirect_uri,authorities, access_token_validity,
+refresh_token_validity, additional_information, create_time, archived, trusted)
+values
+('credentials-client','unity-resource', 'credentials-secret', 'read,write','client_credentials',
+null,'ROLE_UNITY,ROLE_USER',null,
+null,null, now(), 0, 0);
+
+-- get access_token
+http://localhost:8080/spring-oauth-server/oauth/token?client_id=credentials-client&client_secret=credentials-secret&grant_type=client_credentials&scope=read,write
+
+System.out.println(new BCryptPasswordEncoder().encode("credentials-secret"));
+$2a$10$AYGYf5Qlt9yT/BcbG6mvNeZm33xFiyVFDj34.o1Owew1zWt0.dsl2
+
+
+-- grant_type = 'implicit'
+
+--SQL
+insert into oauth_client_details
+(client_id, resource_ids, client_secret, scope, authorized_grant_types,
+web_server_redirect_uri,authorities, access_token_validity,
+refresh_token_validity, additional_information, create_time, archived, trusted)
+values
+('implicit-client','unity-resource', 'implicit-secret', 'read','implicit',
+'http://localhost:7777/spring-oauth-client/implicit','ROLE_UNITY,ROLE_USER',null,
+null,null, now(), 0, 0);
+
+http://localhost:8080/spring-oauth-server/oauth/token?client_id=implicit-client&client_secret=implicit-secret&grant_type=implicit&scope=read
+$2a$10$DAfVkmxjb/KR7W41c5sYTe7oJAR.NJcgheJzuQA.GzzVc95lJP5EC
+
+http://localhost:8080/spring-oauth-server/oauth/authorize?client_id=implicit-client&client_secret=implicit-secret&redirect_uri=http%3a%2f%2flocalhost%3a7777%2fspring-oauth-client%2fimplicit&response_type=token&scope=read
+http://localhost:7777/spring-oauth-client/implicit#access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidW5pdHktcmVzb3VyY2UiXSwiZ3JhbnRfdHlwZSI6ImltcGxpY2l0IiwidXNlcl9uYW1lIjoiYWRtaW4iLCJzY29wZSI6WyJyZWFkIl0sImV4cCI6MTY1ODE5MzkwOCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9NT0JJTEUiLCJST0xFX0FETUlOIiwiUk9MRV9VU0VSIiwiUk9MRV9VTklUWSJdLCJqdGkiOiI5MDM1MTgwYS1kNGNhLTQ1YmItYTI4NC0zNTkzYmQ0ODJmYWMiLCJjbGllbnRfaWQiOiJpbXBsaWNpdC1jbGllbnQifQ.opUjxCGJu0bfem9fRFrjX7xo_OTrTZ_N3GA75JNpnro&token_type=bearer&expires_in=43199&jti=9035180a-d4ca-45bb-a284-3593bd482fac
+
