@@ -1,4 +1,4 @@
-package com.csc.spring.demo.auth.authorization.security;
+package com.csc.spring.demo.auth.authorization.security.service;
 
 import com.csc.spring.demo.auth.authorization.security.domain.SecurityUser;
 import org.springframework.security.core.userdetails.UserDetails;

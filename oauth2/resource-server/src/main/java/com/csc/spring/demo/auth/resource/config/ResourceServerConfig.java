@@ -4,6 +4,7 @@ import com.csc.spring.demo.auth.resource.handler.SecurityAccessDeniedHandler;
 import com.csc.spring.demo.auth.resource.handler.UserAuthenticationSuccessHandler;
 import com.csc.spring.demo.auth.resource.other.SecurityAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,7 +29,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
     private DefaultTokenServices tokenServices;
-    private static final String resourceId = "resource-serve";
+    @Value("${oauth.resource.id}")
+    private String resourceId;
 
     /**
      * 资源安全配置
@@ -55,11 +57,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .accessDeniedHandler(securityAccessDeniedHandler)
         ;
 
-        //authenticationEntryPoint  认证异常流程处理返回
         // tokenExtractor token获取方式,默认BearerTokenExtractor
         // 从header获取token为空则从request.getParameter("access_token")
-//        resources.resourceId(RESOURCE_ID).stateless(true).tokenStore(tokenStore)
-//                .authenticationEntryPoint(authenticationEntryPoint).tokenExtractor(unicomTokenExtractor);
+//       .tokenStore(tokenStore)
+//                .tokenExtractor(unicomTokenExtractor);
 
         /**
          * 其他属性：

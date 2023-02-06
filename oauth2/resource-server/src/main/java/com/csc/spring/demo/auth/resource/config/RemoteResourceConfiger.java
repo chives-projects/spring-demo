@@ -21,7 +21,7 @@ import java.util.Arrays;
 @EnableOAuth2Client
 public class RemoteResourceConfiger {
     @Value("${oauth.token.uri}")
-    private String tokenUri;
+    private String checkTokenUri;
 
     @Value("${oauth.resource.id}")
     private String resourceId;
@@ -52,7 +52,7 @@ public class RemoteResourceConfiger {
         resource.setClientId(resourceClientId);
         resource.setClientSecret(resourceClientSecret);
         resource.setGrantType("password");
-        resource.setAccessTokenUri(tokenUri);
+        resource.setAccessTokenUri(checkTokenUri);
         resource.setUsername(resourceUserId);
         resource.setPassword(resourceUserPassword);
         resource.setScope(Arrays.asList("read","write"));

@@ -1,4 +1,4 @@
-package com.csc.spring.demo.auth.authorization.security;
+package com.csc.spring.demo.auth.authorization.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -33,9 +33,9 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                 .secret(passwordEncoder.encode("secret"))
                 /**
                  ----支持的认证授权类型----
-                 示例（授权码）：http://localhost:9003/oauth/authorize?client_id=auth_code&response_type=code&redirect_uri=http://localhost:9003/auth_user/get_auth_code
-                 示例（access_token）：http://localhost:9003/oauth/token?grant_type=authorization_code&code=kb04Ur&client_id=auth_code&client_secret=secret&redirect_uri=http://localhost:9003/auth_user/get_auth_code
-                 refresh_token示例：http://localhost:9003/oauth/token?client_id=auth_code&client_secret=secret&grant_type=refresh_token&refresh_token=xxxx
+                 示例（授权码）：http://localhost:8083/oauth/authorize?client_id=auth_code&response_type=code&redirect_uri=http://localhost:8083/auth_user/get_auth_code
+                 示例（access_token）：http://localhost:8083/oauth/token?grant_type=authorization_code&code=kb04Ur&client_id=auth_code&client_secret=secret&redirect_uri=http://localhost:8083/auth_user/get_auth_code
+                 refresh_token示例：http://localhost:8083/oauth/token?client_id=auth_code&client_secret=secret&grant_type=refresh_token&refresh_token=xxxx
                  授权码模式（authorization_code）
                  --client_id：客户端ID，必选
                  --response_type：必须为code，必选
@@ -46,7 +46,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                  */
                 .authorizedGrantTypes("authorization_code", "password", "implicit", "client_credentials", "refresh_token")
                 //回调uri，在authorization_code与implicit授权方式时，用以接收服务器的返回信息
-                .redirectUris("http://localhost:9003/auth_user/get_auth_code")
+                .redirectUris("http://localhost:8083/auth_user/get_auth_code")
                 // 用来限制客户端的访问范围，如果为空（默认）的话，那么客户端拥有全部的访问范围
                 .scopes("insert", "update", "del", "select", "replace")
                 .and()
@@ -56,8 +56,8 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                 /**
                  ----密码模式---
                  自己有一套账号权限体系在认证服务器中对应,客户端认证的时候需要带上自己的用户名和密码
-                 示例：http://localhost:9003/oauth/token?username=user&password=123&grant_type=password&client_id=client_password&client_secret=secret
-                 refresh_token示例：http://localhost:9003/oauth/token?grant_type=refresh_token&refresh_token=xxx&client_id=client_password&client_secret=secret
+                 示例：http://localhost:8083/oauth/token?username=user&password=123&grant_type=password&client_id=client_password&client_secret=secret
+                 refresh_token示例：http://localhost:8083/oauth/token?grant_type=refresh_token&refresh_token=xxx&client_id=client_password&client_secret=secret
                  --client_id：客户端ID，必选
                  --client_secret：客户端密码，必选
                  --grant_type：必须为password，必选
@@ -79,7 +79,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                  ---clent模式---
                  没有用户的概念，直接与认证服务器交互，用配置中的用户信息去申请access_token,客户端有自己的client_id、client_secret对应于用户的username、password,
                  客户端拥有自己的authorities，采用client模式认证，客户端的权限就是客户端自己的权限
-                 示例：http://localhost:9003/oauth/token?grant_type=client_credentials&scope=insert&client_id=client&client_secret=secret
+                 示例：http://localhost:8083/oauth/token?grant_type=client_credentials&scope=insert&client_id=client&client_secret=secret
                  --client_id：客户端ID，必选
                  --client_secret：客户端密码，必选
                  --grant_type：必须为password，必选
@@ -92,11 +92,11 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                 .withClient("client_implicit")
                 /**
                  ---授权模式：极简模式---
-                 示例:http://localhost:9003/oauth/authorize?client_id=client_implicit&response_type=token&redirect_uri=http://localhost:9003/auth_user/get_auth_code
+                 示例:http://localhost:8083/oauth/authorize?client_id=client_implicit&response_type=token&redirect_uri=http://localhost:8083/auth_user/get_auth_code
                  */
                 .authorizedGrantTypes("implicit")
                 //回调uri，在authorization_code与implicit授权方式时，用以接收服务器的返回信息
-                .redirectUris("http://localhost:9003/auth_user/get_auth_code")
+                .redirectUris("http://localhost:8083/auth_user/get_auth_code")
                 //用来限制客户端的访问范围，如果为空（默认）的话，那么客户端拥有全部的访问范围
                 .scopes("del", "update");
         try {

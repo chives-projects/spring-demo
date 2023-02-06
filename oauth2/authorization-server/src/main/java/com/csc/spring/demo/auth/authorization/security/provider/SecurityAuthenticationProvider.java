@@ -1,4 +1,4 @@
-package com.csc.spring.demo.auth.authorization.security;
+package com.csc.spring.demo.auth.authorization.security.provider;
 
 import com.csc.spring.demo.auth.authorization.security.domain.SecurityUser;
 import lombok.extern.slf4j.Slf4j;

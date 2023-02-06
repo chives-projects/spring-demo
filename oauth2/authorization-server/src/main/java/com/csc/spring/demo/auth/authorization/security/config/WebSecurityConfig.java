@@ -1,8 +1,8 @@
 package com.csc.spring.demo.auth.authorization.security.config;
 
 import com.csc.spring.demo.auth.authorization.security.SecurityAuthenticationEntryPoint;
-import com.csc.spring.demo.auth.authorization.security.SecurityAuthenticationProvider;
-import com.csc.spring.demo.auth.authorization.security.SecurityUserService;
+import com.csc.spring.demo.auth.authorization.security.provider.SecurityAuthenticationProvider;
+import com.csc.spring.demo.auth.authorization.security.service.SecurityUserService;
 import com.csc.spring.demo.auth.authorization.security.handler.SecurityAccessDeniedHandler;
 import com.csc.spring.demo.auth.authorization.security.handler.SecurityAuthenticationFailureHandler;
 import com.csc.spring.demo.auth.authorization.security.handler.SecurityLogoutSuccessHandler;
