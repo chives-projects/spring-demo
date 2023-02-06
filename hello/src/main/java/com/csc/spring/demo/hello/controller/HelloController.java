@@ -1,11 +1,11 @@
 package com.csc.spring.demo.hello.controller;
 
 import com.csc.spring.demo.hello.domain.User;
+import com.csc.spring.demo.hello.config.interceptor.NoAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +15,13 @@ import javax.servlet.http.HttpServletRequest;
  * @author: csc
  * @create: 2021/3/13 12:00
  */
-@Component
+@NoAuth
 @RestController
 @Api(tags = "示例controller")
 @RequestMapping("hello")
 public class HelloController {
     private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
+
 
     @ApiOperation("get方法")
     @GetMapping(value = "get")
@@ -32,11 +33,11 @@ public class HelloController {
         logger.info("这是info日志。。。");
         logger.warn("这是warm日志。。。");
         logger.error("这是error日志。。。");
-        try {
-            int i = 1 / 0;
-        } catch (Exception e) {
-            logger.error("异常{}", e);
-        }
+//        try {
+//            int i = 1 / 0;
+//        } catch (Exception e) {
+//            logger.error("异常{}", e);
+//        }
         return "spring boot hello get";
     }
 

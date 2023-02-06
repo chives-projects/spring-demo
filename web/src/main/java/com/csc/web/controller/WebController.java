@@ -18,4 +18,13 @@ public class WebController {
         model.addAttribute("atext", "这个冬天不太Cool");
         return "index";
     }
+
+    @RequestMapping(value = {"/login"})
+    public String login(Model model) {
+        return "login";
+    }
+    @RequestMapping(value = {"/grant"})
+    public String grant(Model model) {
+        return "grant";
+    }
 }
