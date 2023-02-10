@@ -19,6 +19,7 @@
     </properties>
 
     <modules>
+        <module>elasticsearch</module>
         <module>hello</module>
         <module>web</module>
         <module>mybatis</module>
