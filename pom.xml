@@ -29,6 +29,7 @@
         <module>oauth2</module>
         <module>mock</module>
         <module>pushmes</module>
+        <module>webflux</module>
     </modules>
     <dependencies>
         <dependency>
