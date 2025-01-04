@@ -1,28 +1,33 @@
-package com.csc.spring.demo;
+package com.csc.spring.demo.pack;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 /**
  * @Description:
  * @Author: csc
  * @Create: 2024-12-27
  */
+@Slf4j
 @Component
 public class Service {
     @Autowired
     WebClient.Builder webClientBuilder;
+    @Autowired
+    ThreadPoolTaskExecutor taskExecutor;
 
     public Mono<String> prompt(String id) {
-
-
+        taskExecutor.execute(() -> {
+            log.info("id {}", id);
+        });
+        log.info("Prompting {}", id);
         return get(id);
     }
 
@@ -37,6 +42,10 @@ public class Service {
                         .build())
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<String>() {
+                })
+                .map(response -> {
+                    log.info("Response: {}", response);
+                    return response;
                 })
                 ;
     }
@@ -62,7 +71,7 @@ public class Service {
                 .build();
     }
 
-    static class User {
+    public static class User {
         private int id;
         private String name;
 

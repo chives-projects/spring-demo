@@ -1,4 +1,4 @@
-package com.csc.spring.demo;
+package com.csc.spring.demo.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;

@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Author: csc
  * @Create: 2024-12-27
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.csc.spring")
 public class WebfluxMain {
     public static void main(String[] args) {
         SpringApplication.run(WebfluxMain.class, args);

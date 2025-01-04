@@ -1,6 +1,7 @@
-package com.csc.spring.demo;
+package com.csc.spring.demo.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -8,16 +9,21 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBuffer;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.client.reactive.ClientHttpRequest;
 import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
+import reactor.util.context.Context;
 
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @Slf4j
 @Configuration
@@ -28,23 +34,48 @@ public class WebFluxConfig {
     public WebClient.Builder webClientBuilder() {
         log.info("webClientBuilder create .....");
         return WebClient.builder()
-                .filter(logRequest())
-                .filter(logResponse());
+                .filter((request, next) -> {
+                    // 捕获当前线程的 MDC 信息
+                    Map<String, String> mdcContext = MDC.getCopyOfContextMap();
+                    return next.exchange(request)
+                            .contextWrite(context -> {
+                                // 将 MDC 信息传递到 Reactor 的上下文中
+                                return context.put("mdc", mdcContext);
+                            })
+                            .doOnEach(signal -> {
+                                if (signal.isOnComplete() || signal.isOnError()) {
+                                    // 清理 MDC，避免线程复用时信息泄漏
+                                    MDC.clear();
+                                }
+                            })
+                            .subscriberContext(context -> {
+                                // 恢复 MDC 信息到当前线程
+                                Map<String, String> mdc = context.getOrDefault("mdc", null);
+                                if (mdc != null) {
+                                    MDC.setContextMap(mdc);
+                                }
+                                return context;
+                            });
+                })
+//                .filter(logRequest())
+//                .filter(logResponse())
+                ;
     }
 
     // 请求日志拦截器
     private ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(request -> {
             try {
-                BodyInserter<?, ? super ClientHttpRequest> body = request.body();
-                Field declaredField = request.body().getClass().getDeclaredField("arg$1");
-                declaredField.setAccessible(true);
-                Object o = declaredField.get(body);
-                log.info("Request: {} {} - Headers: {} Body: {}", request.method(), request.url(), request.headers(), o);
+                if (request.method() == HttpMethod.POST) {
+                    BodyInserter<?, ? super ClientHttpRequest> body = request.body();
+                    Field declaredField = request.body().getClass().getDeclaredField("arg$1");
+                    declaredField.setAccessible(true);
+                    Object o = declaredField.get(body);
+                    log.info("Request: {} {} - Headers: {} Body: {}", request.method(), request.url(), request.headers(), o);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
             return Mono.just(request);
 
         });
@@ -99,9 +130,9 @@ public class WebFluxConfig {
 //        return factory;
 //    }
 
-//    @Bean
-//    public Scheduler customScheduler() {
-//        return Schedulers.newParallel("customScheduler", 8); // 创建一个大小为 8 的线程池
-//    }
+    @Bean
+    public Scheduler customScheduler() {
+        return Schedulers.newParallel("customScheduler", 8); // 创建一个大小为 8 的线程池
+    }
 
 }
